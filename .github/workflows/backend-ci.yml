@@ -1,0 +1,40 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.12"
+
+      - name: Install UV
+
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install Dependencies
+
+        run: uv sync
+
+      - name: Compile
+
+        run: python -m compileall app
+
+      - name: Run Tests
+
+        run: pytest -q
